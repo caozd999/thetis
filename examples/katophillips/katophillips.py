@@ -17,8 +17,6 @@ Initially buoyancy frequency is constant N = 0.01 s-1.
     marine model with a finite difference turbulence closure model.
     Ocean Modelling, 47:55-64.
     http://dx.doi.org/10.1016/j.ocemod.2012.01.001
-
-Tuomas Karna 2016-03-05
 """
 from thetis import *
 
@@ -27,7 +25,7 @@ physical_constants['rho0'] = 1027.0  # NOTE must match empirical setup
 outputdir = 'outputs'
 # set mesh resolution
 dx = 2500.0
-layers = 250
+layers = 200
 depth = 50.0
 
 # generate unit mesh and transform its coords
@@ -40,10 +38,9 @@ mesh2d = PeriodicRectangleMesh(nx, ny, lx, ly, direction='x', reorder=True)
 mesh2d.coordinates.dat.data[:, 0] -= lx/2
 mesh2d.coordinates.dat.data[:, 1] -= ly/2
 
-print_output('Exporting to ' + outputdir)
-dt = 60.0
+dt = 150.0
 t_end = 30 * 3600.0
-t_export = 5*60.0
+t_export = 300.0
 u_mag = 1.0
 
 # bathymetry
@@ -74,7 +71,6 @@ options.timestepper_type = 'SSPRK22'
 options.timestepper_options.use_automatic_timestep = False
 options.timestep = dt
 options.simulation_end_time = t_end
-options.output_directory = outputdir
 options.horizontal_velocity_scale = Constant(u_mag)
 options.check_salinity_overshoot = True
 options.fields_to_export = ['uv_2d', 'elev_2d', 'elev_3d', 'uv_3d',
@@ -88,6 +84,13 @@ options.fields_to_export_hdf5 = ['uv_2d', 'elev_2d', 'uv_3d', 'salt_3d',
                                  'eddy_visc_3d', 'eddy_diff_3d',
                                  'shear_freq_3d', 'buoy_freq_3d',
                                  'tke_3d', 'psi_3d', 'eps_3d', 'len_3d', ]
+turbulence_model_options = options.turbulence_model_options
+turbulence_model_options.apply_defaults('k-epsilon')
+turbulence_model_options.stability_function_name = 'Canuto A'
+layer_str = 'nz{:}'.format(layers)
+odir = '_'.join([outputdir, layer_str, turbulence_model_options.closure_name, turbulence_model_options.stability_function_name.replace(' ', '-')])
+options.output_directory = odir
+print_output('Exporting to ' + options.output_directory)
 
 solver_obj.create_function_spaces()
 
