@@ -141,24 +141,24 @@ class StabilityFunction(object):
         # use equilibrium equation (Umlauf and Buchard, 2005, eq A.15)
         # s_m*a_shear - s_h*a_shear*ri_st = 1.0
         # to solve a_shear at equilibrium
-        from scipy.optimize import minimize
+        # from scipy.optimize import minimize
+        #
+        # def cost(a_shear):
+        #     a_buoy = ri_st*a_shear
+        #     s_m, s_h = self.eval_funcs(a_buoy, a_shear)
+        #     res = s_m*a_shear - s_h*a_buoy - 1.0
+        #     return res**2
+        # p = minimize(cost, 1.0)
+        # assert p.success, 'solving alpha_shear failed'
+        # a_shear = p.x[0]
 
-        def cost(a_shear):
-            a_buoy = ri_st*a_shear
-            s_m, s_h = self.eval_funcs(a_buoy, a_shear)
-            res = s_m*a_shear - s_h*a_buoy - 1.0
-            return res**2
-        p = minimize(cost, 1.0)
-        assert p.success, 'solving alpha_shear failed'
-        a_shear = p.x[0]
-
-        # # B) solve analytically
-        # # compute alpha_shear for equilibrium condition (Umlauf and Buchard, 2005, eq A.19)
-        # # aM^2 (-d5 + n2 - (d3 - n1 + nb2 )Ri - (d4 + nb1)Ri^2) + aM (-d2 + n0 - (d1 + nb0)Ri) - d0 = 0
-        # a = -self.d5 + self.n2 - (self.d3 - self.n1 + self.nb2)*ri_st - (self.d4 + self.nb1)*ri_st**2
-        # b = -self.d2 + self.n0 - (self.d1 + self.nb0)*ri_st
-        # c = -self.d0
-        # a_shear = (-b + np.sqrt(b**2 - 4*a*c))/2/a
+        # B) solve analytically
+        # compute alpha_shear for equilibrium condition (Umlauf and Buchard, 2005, eq A.19)
+        # aM^2 (-d5 + n2 - (d3 - n1 + nb2 )Ri - (d4 + nb1)Ri^2) + aM (-d2 + n0 - (d1 + nb0)Ri) - d0 = 0
+        a = -self.d5 + self.n2 - (self.d3 - self.n1 + self.nb2)*ri_st - (self.d4 + self.nb1)*ri_st**2
+        b = -self.d2 + self.n0 - (self.d1 + self.nb0)*ri_st
+        c = -self.d0
+        a_shear = (-b + np.sqrt(b**2 - 4*a*c))/2/a
 
         return a_shear
 
