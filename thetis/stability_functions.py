@@ -131,7 +131,8 @@ class StabilityFunction(object):
             36.0*self.a1*self.ab5*self.nn**2*self.nb
         self.n2 = 9.0*self.a1*(self.ab2**2 - self.ab1**2)*self.nn**2
         self.nb0 = 12.0*self.ab3*self.nn**3*self.nb  # NOTE ab3 is not squared!
-        self.nb1 = 12.0*self.a5*self.ab3**2*self.nn**2
+        self.nb1 = 12.0*self.a5*self.ab3*self.nn**2  # NOTE ab3 is not squared!
+        # FIXME check these equations!
         self.nb2 = 9.0*self.a1*self.ab3*(self.ab1 - self.ab2)*self.nn**2 +\
             (6.0*self.a1*(self.a2 - 3.0*self.a3) - 4.0*(self.a2**2 - 3.0*self.a3**2))*self.ab3*self.nn*self.nb
 
