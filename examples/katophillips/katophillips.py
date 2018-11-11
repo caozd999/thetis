@@ -86,7 +86,9 @@ options.fields_to_export_hdf5 = ['uv_2d', 'elev_2d', 'uv_3d', 'salt_3d',
                                  'tke_3d', 'psi_3d', 'eps_3d', 'len_3d', ]
 turbulence_model_options = options.turbulence_model_options
 turbulence_model_options.apply_defaults('k-epsilon')
+#turbulence_model_options.ri_st = 0.25
 turbulence_model_options.stability_function_name = 'Canuto A'
+#turbulence_model_options.stability_function_name = 'Kantha-Clayson'
 layer_str = 'nz{:}'.format(layers)
 odir = '_'.join([outputdir, layer_str, turbulence_model_options.closure_name, turbulence_model_options.stability_function_name.replace(' ', '-')])
 options.output_directory = odir
