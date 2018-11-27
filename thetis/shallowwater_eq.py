@@ -355,7 +355,7 @@ class ExternalPressureGradientTerm(ShallowWaterMomentumTerm):
         if grad_eta_by_parts:
             f = -g_grav*head*nabla_div(self.u_test)*self.dx
             if uv is not None:
-                head_star = avg(head) + 0.5*sqrt(avg(total_h)/g_grav)*jump(uv, self.normal)
+                head_star = avg(head) + sqrt(avg(total_h)/g_grav)*jump(uv, self.normal)
             else:
                 head_star = avg(head)
             f += g_grav*head_star*jump(self.u_test, self.normal)*self.dS
@@ -371,9 +371,9 @@ class ExternalPressureGradientTerm(ShallowWaterMomentumTerm):
                 if funcs is None or 'symm' in funcs:
                     # assume land boundary
                     # impermeability implies external un=0
-                    un_jump = inner(uv, self.normal)
-                    head_rie = head + sqrt(total_h/g_grav)*un_jump
-                    f += g_grav*head_rie*dot(self.u_test, self.normal)*ds_bnd
+                    un_jump = 2*inner(uv, self.normal)
+                    eta_rie = head + sqrt(total_h/g_grav)*un_jump
+                    f += g_grav*eta_rie*dot(self.u_test, self.normal)*ds_bnd
         else:
             f = g_grav*inner(grad(head), self.u_test) * self.dx
             for bnd_marker in self.boundary_markers:
