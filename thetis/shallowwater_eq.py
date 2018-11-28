@@ -418,7 +418,9 @@ class HUDivTerm(ShallowWaterContinuityTerm):
             if self.eta_is_dg:
                 h = avg(total_h)
                 uv_rie = avg(uv) + sqrt(g_grav/h)*jump(eta, self.normal)
-                hu_star = h*uv_rie
+                eta_rie = avg(eta_old) + sqrt(h/g_grav)*jump(uv_old, self.normal)
+                h_rie = avg(self.bathymetry) + eta_rie
+                hu_star = h_rie*uv_rie
                 f += inner(jump(self.eta_test, self.normal), hu_star)*self.dS
             for bnd_marker in self.boundary_markers:
                 funcs = bnd_conditions.get(bnd_marker)
